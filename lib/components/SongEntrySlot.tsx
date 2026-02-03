@@ -39,7 +39,7 @@ export default async function SongEntrySlot({ user = undefined }: SongEntrySlotP
                 <div className="text-center px-8">
                     {/* User Badge */}
                     <div className="mb-4">
-                        <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600`}>
+                        <span className={`inline-block px-4 py-2 text-sm font-bold rounded-full bg-linear-to-r from-gray-700 to-gray-900 text-white shadow-lg`}>
                             {user.name}
                         </span>
                     </div>
@@ -61,8 +61,7 @@ export default async function SongEntrySlot({ user = undefined }: SongEntrySlotP
                 <div className="text-center px-8">
                     {/* User Badge */}
                     <div className="mb-4">
-                        <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800
-                            `}>
+                        <span className={`inline-block px-4 py-2 text-sm font-bold rounded-full bg-linear-to-r from-green-600 to-green-800 text-white shadow-lg`}>
                             Dein Song
                         </span>
                     </div>
