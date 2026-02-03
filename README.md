@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Song of the Day
 
-## Getting Started
+Eine Plattform zum Teilen und Entdecken von täglichen Lieblingssongs. Jeder Benutzer kann einmal pro Tag seinen aktuellen "Song of the Day" hinzufügen und die Auswahl anderer Benutzer sehen.
 
-First, run the development server:
+## Features
+
+- 🎵 **Täglicher Song**: Füge einmal pro Tag deinen aktuellen Lieblingssong hinzu
+- 🔗 **Spotify Integration**: Importiere Songs direkt über Spotify URLs
+- 👥 **Community**: Siehe was andere Benutzer heute hören
+- 🎨 **Modern UI**: Sauberes und intuitives Design mit Tailwind CSS
+
+## Tech Stack
+
+- **Frontend**: Next.js 16 mit App Router
+- **Backend**: Next.js API Routes
+- **Database**: MongoDB mit Mongoose
+- **Styling**: Tailwind CSS
+- **External API**: Spotify Web API
+
+## Setup
+
+### 1. Repository klonen
+
+```bash
+git clone <repository-url>
+cd songoftheday
+```
+
+### 2. Dependencies installieren
+
+```bash
+npm install
+# oder
+yarn install
+```
+
+### 3. Environment Variables konfigurieren
+
+Erstelle eine `.env.local` Datei im Projektroot:
+
+```env
+# Spotify API Credentials
+SPOTIFY_CLIENT_ID=deine_spotify_client_id
+SPOTIFY_CLIENT_SECRET=deine_spotify_client_secret
+
+# MongoDB Connection
+MONGODB_URI=mongodb://localhost:27017/songoftheday
+```
+
+### 4. Spotify Developer Setup
+
+1. Gehe zu [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+2. Erstelle eine neue App
+3. Kopiere die **Client ID** und **Client Secret**
+4. Füge sie in deine `.env.local` ein
+
+### 5. MongoDB Verbindung
+
+Stelle sicher dass eine MongoDB Datenbank läuft und aktualisiere die Verbindung in `lib/mongodb.ts` falls nötig.
+
+### 6. Development Server starten
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Verwendung
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Öffne [http://localhost:3000](http://localhost:3000) in deinem Browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
 
-## Learn More
+| Variable | Beschreibung | Erforderlich |
+|----------|-------------|-------------|
+| `SPOTIFY_CLIENT_ID` | Spotify App Client ID | ✅ Ja |
+| `SPOTIFY_CLIENT_SECRET` | Spotify App Client Secret | ✅ Ja |
+| `MONGODB_URI` | MongoDB Verbindungs-String | ✅ Ja |
 
-To learn more about Next.js, take a look at the following resources:
+## API Endpoints
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `POST /api/spotify/import` - Importiert einen Song über Spotify URL
+- `GET /` - Hauptseite mit Song-Übersicht
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Projektstruktur
 
-## Deploy on Vercel
+```
+songoftheday/
+├── app/
+│   ├── api/spotify/import/    # Spotify Import API
+│   ├── add-song/              # Song hinzufügen Seite
+│   └── page.tsx               # Hauptseite
+├── lib/
+│   ├── components/            # React Komponenten
+│   ├── models/               # Mongoose Models
+│   ├── mongodb.ts            # DB Verbindung
+│   ├── spotify.ts            # Spotify API Utils
+│   └── utils.ts              # Helper Funktionen
+└── public/                   # Statische Assets
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Die einfachste Methode ist die Deployment auf [Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme):
+
+1. Verbinde dein GitHub Repository
+2. Füge die Environment Variables in Vercel hinzu
+3. Deploy!
+
+Für weitere Deployment-Optionen siehe die [Next.js Deployment Dokumentation](https://nextjs.org/docs/app/building-your-application/deploying).
