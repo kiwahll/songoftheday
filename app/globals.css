@@ -3,6 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --ios-blue: #007AFF;
+  --ios-gray: #8E8E93;
+  --ios-light-gray: #F2F2F7;
+  --ios-card-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
 @theme inline {
@@ -16,6 +20,8 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --ios-light-gray: #1C1C1E;
+    --ios-card-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -23,4 +29,65 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* iOS Card Styles */
+.ios-card {
+  @apply bg-white rounded-2xl p-6 shadow-sm mb-4 transition-all duration-200 hover:shadow-md border border-gray-100;
+}
+
+.ios-card--own {
+  @apply border-blue-100 bg-blue-50/50;
+}
+
+/* iOS Header */
+.ios-header {
+  @apply bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-10 backdrop-blur-lg;
+}
+
+.ios-title {
+  @apply text-2xl font-bold text-gray-900 leading-tight;
+}
+
+.ios-subtitle {
+  @apply text-sm text-gray-600 mt-1;
+}
+
+.ios-header-icon {
+  @apply text-2xl;
+}
+
+/* iOS Feed Container */
+.ios-feed-container {
+  @apply px-6 py-6 max-w-md mx-auto;
+}
+
+.ios-section {
+  @apply mb-8;
+}
+
+.ios-section-title {
+  @apply text-lg font-bold text-gray-900 mb-4 px-2;
+}
+
+.ios-feed {
+  @apply space-y-4;
+}
+
+/* iOS Action Button */
+.ios-action-button {
+  @apply sticky bottom-6 z-20;
+}
+
+.ios-button-primary {
+  @apply w-full bg-blue-500 text-white py-4 px-6 rounded-2xl font-semibold text-center shadow-lg hover:bg-blue-600 transition-colors duration-200 flex items-center justify-center;
+}
+
+/* iOS Typography */
+.ios-card h3 {
+  @apply text-gray-900;
+}
+
+.ios-card p {
+  @apply text-gray-600;
 }

@@ -2,18 +2,61 @@ import SongEntrySlot from "@/lib/components/SongEntrySlot";
 import User from "@/lib/models/User";
 import dbConnect from "@/lib/mongodb";
 import { currentUserId } from "@/lib/utils";
+import Link from 'next/link';
 
 export default async function Home() {
     await dbConnect();
     const users = await User.find({ _id: { $ne: currentUserId } }).lean();
 
+    const today = new Date().toLocaleDateString('de-DE', { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long' 
+    });
+
     return (
-        <main className="h-screen flex flex-col bg-white">
-            {/* Obere Hälfte */}
-            <SongEntrySlot user={users[0]} />
-            
-            {/* Untere Hälfte */}
-            <SongEntrySlot />
-        </main>
+        <div className="min-h-screen bg-gray-50">
+            {/* iOS Header */}
+            <header className="ios-header">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="ios-title">Song of the Day</h1>
+                        <p className="ios-subtitle">{today}</p>
+                    </div>
+                    <div className="ios-header-icon">
+                        🎵
+                    </div>
+                </div>
+            </header>
+
+            {/* Feed Container */}
+            <main className="ios-feed-container">
+                {/* Dein Song Card */}
+                <div className="ios-section">
+                    <SongEntrySlot />
+                </div>
+
+                {/* Freunde Songs */}
+                <div className="ios-section">
+                    <h2 className="ios-section-title">Freunde</h2>
+                    <div className="ios-feed">
+                        {users.map((user) => (
+                            <SongEntrySlot key={user._id} user={user} />
+                        ))}
+                    </div>
+                </div>
+
+                {/* Fester Song hinzufügen Button */}
+                <div className="ios-action-button">
+                    <Link 
+                        href="/add-song"
+                        className="ios-button-primary"
+                    >
+                        <span className="text-xl mr-2">+</span>
+                        Song hinzufügen
+                    </Link>
+                </div>
+            </main>
+        </div>
     );
 }
