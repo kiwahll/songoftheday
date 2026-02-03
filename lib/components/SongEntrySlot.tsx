@@ -52,13 +52,15 @@ export default async function SongEntrySlot({ user = undefined }: SongEntrySlotP
                 <div className="relative mb-3">
                     <div className="w-40 h-40 mx-auto bg-gray-100 rounded-3xl shadow-lg overflow-hidden ring-4 ring-white ring-offset-2 ring-offset-gray-50">
                         {entrie ? (
-                            <Image 
-                                src={entrie.imageSrc || "https://i.scdn.co/image/ab67616d00001e02b5c53fb3985d4f1aa48bfe77"} 
-                                width={160} 
-                                height={160} 
-                                alt="Album Cover" 
-                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                            />
+                            <Link href={"https://open.spotify.com/intl-de/track/" + entrie.spotifyId} target="_blank">
+                                <Image
+                                    src={entrie.imageSrc || "https://i.scdn.co/image/ab67616d00001e02b5c53fb3985d4f1aa48bfe77"}
+                                    width={160}
+                                    height={160}
+                                    alt="Album Cover"
+                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                />
+                            </Link>
                         ) : (
                             <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
                                 <div className="text-gray-400 text-center">
@@ -99,13 +101,15 @@ export default async function SongEntrySlot({ user = undefined }: SongEntrySlotP
                 <div className="relative mb-3">
                     <div className="w-40 h-40 mx-auto bg-gray-100 rounded-3xl shadow-lg overflow-hidden ring-4 ring-white ring-offset-2 ring-offset-blue-50">
                         {entrie ? (
-                            <Image 
-                                src={entrie.imageSrc} 
-                                width={160} 
-                                height={160} 
-                                alt="Album Cover" 
-                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                            />
+                            <Link href={"https://open.spotify.com/intl-de/track/" + entrie.spotifyId} target="_blank">
+                                <Image
+                                    src={entrie.imageSrc}
+                                    width={160}
+                                    height={160}
+                                    alt="Album Cover"
+                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                />
+                            </Link>
                         ) : (
                             <Link href="/add-song" className="w-full h-full flex items-center justify-center bg-linear-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 transition-all duration-200 rounded-3xl">
                                 <div className="text-center">
