@@ -24,7 +24,19 @@ export async function POST(request: NextRequest) {
             path: '/'
         });
 
-        return NextResponse.json({ message: "Auth erfolgreich" }, { status: 201 });
+        return NextResponse.json(
+            { message: "Auth erfolgreich" }, 
+            { 
+                status: 201,
+                headers: {
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, private',
+                    'Pragma': 'no-cache',
+                    'Expires': '0',
+                    'Vary': '*',
+                    'Surrogate-Control': 'no-store'
+                }
+            }
+        );
 
     } catch (error) {
         console.error('Auth Error:', error);
