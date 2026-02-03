@@ -7,13 +7,7 @@
   --ios-gray: #8E8E93;
   --ios-light-gray: #F2F2F7;
   --ios-card-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-manrope: var(--font-manrope);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -28,87 +22,212 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-manrope), Arial, Helvetica, sans-serif;
 }
 
-/* iOS Card Styles */
+/* Username - Lebendig & Persönlich */
+.username-accent {
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 600;
+  color: #007AFF;
+  font-size: 1.125rem;
+  transition: all 0.2s ease;
+}
+
+/* Song-Titel - Energisch & Zentral */
+.song-title-bold {
+  font-family: var(--font-manrope), sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #171717;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.song-title-bold:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* iOS Card Styles - Ohne @apply */
 .ios-card {
-  @apply bg-white rounded-2xl p-6 shadow-sm mb-4 transition-all duration-200 hover:shadow-md border border-gray-100;
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+  border: 1px solid #f3f4f6;
+}
+
+.ios-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .ios-card--own {
-  @apply border-blue-100 bg-blue-50/50;
+  border-color: #dbeafe;
+  background-color: #eff6ff;
 }
 
-/* iOS Header */
+/* iOS Header - Ohne @apply */
 .ios-header {
-  @apply bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-10 backdrop-blur-lg;
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(16px);
 }
 
 .ios-title {
-  @apply text-2xl font-bold text-gray-900 leading-tight;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
 }
 
 .ios-subtitle {
-  @apply text-sm text-gray-600 mt-1;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
 }
 
 .ios-header-icon {
-  @apply text-2xl;
+  font-size: 1.5rem;
 }
 
-/* iOS Feed Container */
+/* iOS Feed Container - Ohne @apply */
 .ios-feed-container {
-  @apply px-6 py-6 max-w-md mx-auto;
+  padding: 1.5rem;
+  max-width: 28rem;
+  margin: 0 auto;
 }
 
 .ios-section {
-  @apply mb-8;
+  margin-bottom: 2rem;
 }
 
 .ios-section-title {
-  @apply text-lg font-bold text-gray-900 mb-4 px-2;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
 }
 
 .ios-feed {
-  @apply space-y-4;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-/* iOS Action Button */
+/* iOS Action Button - Ohne @apply */
 .ios-action-button {
-  @apply sticky bottom-6 z-20;
+  position: sticky;
+  bottom: 1.5rem;
+  z-index: 20;
 }
 
 .ios-button-primary {
-  @apply w-full bg-blue-500 text-white py-4 px-6 rounded-2xl font-semibold text-center shadow-lg hover:bg-blue-600 transition-colors duration-200 flex items-center justify-center;
+  width: 100%;
+  background-color: #3b82f6;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ios-button-primary:hover {
+  background-color: #2563eb;
 }
 
 /* iOS Typography */
 .ios-card h3 {
-  @apply text-gray-900;
+  color: #111827;
 }
 
 .ios-card p {
-  @apply text-gray-600;
+  color: #6b7280;
 }
 
-/* iOS Form Styles */
+/* iOS Form Styles - Ohne @apply */
 .ios-back-button {
-  @apply text-2xl font-bold text-blue-500 hover:text-blue-600 transition-colors;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #3b82f6;
+  transition: color 0.2s ease;
+}
+
+.ios-back-button:hover {
+  color: #2563eb;
 }
 
 .ios-form-group {
-  @apply space-y-2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .ios-label {
-  @apply block text-sm font-semibold text-gray-700;
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
 }
 
 .ios-input {
-  @apply w-full px-4 py-3 border border-gray-200 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background-color: white;
+  color: #111827;
+  transition: all 0.2s ease;
+}
+
+.ios-input::placeholder {
+  color: #9ca3af;
+}
+
+.ios-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
 .ios-button-secondary {
-  @apply w-full bg-white border border-gray-200 text-gray-700 py-3 px-6 rounded-xl font-semibold text-center hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ios-button-secondary:hover {
+  background-color: #f9fafb;
 }

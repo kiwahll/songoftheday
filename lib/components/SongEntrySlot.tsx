@@ -43,7 +43,7 @@ export default async function SongEntrySlot({ user = undefined }: SongEntrySlotP
                         {user.name.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                        <p className="font-medium text-gray-700 text-xs">{user.name}</p>
+                        <p className="username-accent">{user.name}</p>
                         <p className="text-xs text-gray-400">heute</p>
                     </div>
                 </div>
@@ -72,7 +72,7 @@ export default async function SongEntrySlot({ user = undefined }: SongEntrySlotP
 
                 {/* Song Infos - prominenter */}
                 <div className="text-center">
-                    <h3 className="font-bold text-gray-900 text-lg mb-1 truncate">
+                    <h3 className="song-title-bold mb-1 truncate">
                         {entrie ? entrie.name : "Kein Song gewählt"}
                     </h3>
                     <p className="text-gray-700 text-sm truncate font-medium">
@@ -90,7 +90,7 @@ export default async function SongEntrySlot({ user = undefined }: SongEntrySlotP
                         DU
                     </div>
                     <div>
-                        <p className="font-medium text-gray-700 text-xs">Dein Song</p>
+                        <p className="username-accent">Dein Song</p>
                         <p className="text-xs text-gray-400">heute</p>
                     </div>
                 </div>
@@ -119,7 +119,7 @@ export default async function SongEntrySlot({ user = undefined }: SongEntrySlotP
 
                 {/* Song Infos - prominenter */}
                 <div className="text-center">
-                    <h3 className="font-bold text-gray-900 text-lg mb-1 truncate">
+                    <h3 className="song-title-bold mb-1 truncate">
                         {entrie ? entrie.name : "Song hinzufügen"}
                     </h3>
                     <p className="text-gray-700 text-sm truncate font-medium">
