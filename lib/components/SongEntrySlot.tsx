@@ -5,6 +5,7 @@ import dbConnect from "../mongodb";
 import { currentUserId } from "../utils";
 import Image from 'next/image';
 import { Suspense } from "react";
+import Link from 'next/link';
 
 interface SongEntrySlotProps {
     user?: UserData | undefined
@@ -68,9 +69,13 @@ export default async function SongEntrySlot({ user = undefined }: SongEntrySlotP
 
                     {/* Album Cover */}
                     <div className="w-48 h-48 mx-auto mb-4 bg-gray-300 rounded-lg shadow-lg">
-                        {entrie ? <Image src={entrie.imageSrc} width={300} height={300} alt="Plus" /> : <div className="w-full h-full flex items-center justify-center">
-                            <Image src="/plus.png" width={80} height={80} alt="Plus" />
-                        </div>}
+                        {entrie ? (
+                            <Image src={entrie.imageSrc} width={300} height={300} alt="Album Cover" />
+                        ) : (
+                            <Link href="/add-song" className="w-full h-full flex items-center justify-center hover:bg-gray-200 rounded-lg transition-colors">
+                                <Image src="/plus.png" width={80} height={80} alt="Plus" />
+                            </Link>
+                        )}
                     </div>
 
                     {/* Song Infos */}
