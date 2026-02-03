@@ -1,12 +1,14 @@
 import SongEntrySlot from "@/lib/components/SongEntrySlot";
 import User from "@/lib/models/User";
 import dbConnect from "@/lib/mongodb";
-import { currentUserId } from "@/lib/utils";
 import Link from 'next/link';
+import { cookies } from "next/headers";
 
 export default async function Home() {
     await dbConnect();
-    const users = await User.find({ _id: { $ne: currentUserId } }).lean();
+    const cookieStore = await cookies();
+    const code = cookieStore.get("code")?.value;
+    const users = await User.find({ _id: { $ne: code } }).lean();
 
     const today = new Date().toLocaleDateString('de-DE', { 
         weekday: 'long', 
