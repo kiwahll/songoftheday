@@ -7,11 +7,6 @@ export default function LoginPage() {
     const [error, setError] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const setAuthCookie = (code: string) => {
-        const isSecure = window.location.protocol === 'https:';
-        document.cookie = `code=${code}; path=/; max-age=86400; ${isSecure ? 'secure;' : ''} samesite=strict`;
-    };
-
     async function handleSubmit(formData: FormData) {
         const code = formData.get('code') as string;
 
@@ -39,9 +34,10 @@ export default function LoginPage() {
                 return;
             }
 
-            // Erfolgreiche Authentifizierung - Cookie setzen
-            setAuthCookie(code);
+            // Erfolgreiche Authentifizierung - Cookie wird server-seitig gesetzt
             console.log('Auth erfolgreich:', data.message);
+            
+            // Redirect zur Startseite
             window.location.href = '/';
 
         } catch (err) {

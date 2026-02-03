@@ -1,6 +1,7 @@
 import User from "@/lib/models/User";
 import dbConnect from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
     try {
@@ -14,6 +15,14 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
             );
         }
+
+        const cookieStore = await cookies();
+        cookieStore.set("code", code, {
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 259200, // 3 Tage in Sekunden
+            path: '/'
+        });
 
         return NextResponse.json({ message: "Auth erfolgreich" }, { status: 201 });
 
