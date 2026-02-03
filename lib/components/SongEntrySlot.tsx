@@ -44,7 +44,7 @@ export default async function SongEntrySlot({ user = undefined }: SongEntrySlotP
                     </div>
 
                     {/* Album Cover */}
-                    <div className="w-48 h-48 mx-auto mb-4 bg-gray-200 rounded-lg shadow-lg">
+                    <div className="w-48 h-48 mx-auto mb-4 bg-gray-300 rounded-lg shadow-lg">
                         {entrie ? <Image src="https://i.scdn.co/image/ab67616d00001e02b5c53fb3985d4f1aa48bfe77" width={300} height={300} alt="Plus" /> : <div></div>}
                     </div>
 
@@ -67,7 +67,7 @@ export default async function SongEntrySlot({ user = undefined }: SongEntrySlotP
                     </div>
 
                     {/* Album Cover */}
-                    <div className="w-48 h-48 mx-auto mb-4 bg-gray-200 rounded-lg shadow-lg">
+                    <div className="w-48 h-48 mx-auto mb-4 bg-gray-300 rounded-lg shadow-lg">
                         {entrie ? <Image src={entrie.imageSrc} width={300} height={300} alt="Plus" /> : <div className="w-full h-full flex items-center justify-center">
                             <Image src="/plus.png" width={80} height={80} alt="Plus" />
                         </div>}
