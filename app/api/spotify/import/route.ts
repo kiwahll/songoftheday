@@ -3,6 +3,7 @@ import Entry from '@/lib/models/Entry';
 import dbConnect from '@/lib/mongodb';
 import { fetchSpotifyTrack } from '@/lib/spotify';
 import { cookies } from 'next/headers';
+import { Model } from 'mongoose';
 
 // Hilfsfunktion: Spotify Track ID aus URL extrahieren
 function extractSpotifyId(url: string): string | null {
@@ -48,10 +49,7 @@ export async function POST(request: NextRequest) {
         // 1. Tageslimit prüfen
         const todayEntry = await checkTodayEntry(code.value);
         if (todayEntry) {
-            return NextResponse.json(
-                { error: "Heute bereits ein Song hinzugefügt" },
-                { status: 429 }
-            );
+            await Entry.findByIdAndDelete(todayEntry._id);
         }
 
         // 2. Track ID extrahieren
