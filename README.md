@@ -97,13 +97,3 @@ songoftheday/
 │   └── utils.ts              # Helper Funktionen
 └── public/                   # Statische Assets
 ```
-
-## Deployment
-
-Die einfachste Methode ist die Deployment auf [Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme):
-
-1. Verbinde dein GitHub Repository
-2. Füge die Environment Variables in Vercel hinzu
-3. Deploy!
-
-Für weitere Deployment-Optionen siehe die [Next.js Deployment Dokumentation](https://nextjs.org/docs/app/building-your-application/deploying).
