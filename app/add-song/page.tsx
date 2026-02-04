@@ -3,6 +3,7 @@
 import { useEffect, useState, SubmitEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import React from 'react';
 
 export default function AddSongPage() {
     const [spotifyUrl, setSpotifyUrl] = useState('');
@@ -10,12 +11,10 @@ export default function AddSongPage() {
     const [error, setError] = useState('');
     const router = useRouter();
 
-    const searchParams = useSearchParams();
     useEffect(() => {
-        if (searchParams) {
-            const text = searchParams.get('text');
-            if (text) setSpotifyUrl(text);
-        }
+        const params = new URLSearchParams(window.location.search);
+        const text = params.get('text');
+        if (text) setSpotifyUrl(text);
     }, []);
 
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
