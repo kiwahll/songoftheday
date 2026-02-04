@@ -231,3 +231,19 @@ body {
 .ios-button-secondary:hover {
   background-color: #f9fafb;
 }
+
+/* iOS Settings Styles */
+.ios-settings-profile {
+  text-align: center;
+  padding: 2rem;
+}
+
+.ios-settings-item {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ios-settings-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

@@ -26,7 +26,9 @@ export default async function Home() {
                         <p className="ios-subtitle">{today}</p>
                     </div>
                     <div className="ios-header-icon">
-                        🎵
+                        <Link href="/settings" className="text-gray-600 hover:text-gray-900 transition-colors">
+                            ⚙️
+                        </Link>
                     </div>
                 </div>
             </header>
