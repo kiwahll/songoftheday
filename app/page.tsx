@@ -3,6 +3,8 @@ import User from "@/lib/models/User";
 import dbConnect from "@/lib/mongodb";
 import Link from 'next/link';
 import { cookies } from "next/headers";
+import Friend from "@/lib/models/Friend";
+import mongoose from "mongoose";
 
 export default async function Home() {
     await dbConnect();
@@ -10,10 +12,10 @@ export default async function Home() {
     const code = cookieStore.get("code")?.value;
     const users = await User.find({ _id: { $ne: code } }).lean();
 
-    const today = new Date().toLocaleDateString('de-DE', { 
-        weekday: 'long', 
-        day: 'numeric', 
-        month: 'long' 
+    const today = new Date().toLocaleDateString('de-DE', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
     });
 
     return (
@@ -52,7 +54,7 @@ export default async function Home() {
 
                 {/* Fester Song hinzufügen Button */}
                 <div className="ios-action-button">
-                    <Link 
+                    <Link
                         href="/add-song"
                         className="ios-button-primary"
                     >
