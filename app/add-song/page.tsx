@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, SubmitEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -12,11 +12,13 @@ export default function AddSongPage() {
 
     const searchParams = useSearchParams();
     useEffect(() => {
-        const text = searchParams.get('text');
-        if (text) setSpotifyUrl(text);
+        if (searchParams) {
+            const text = searchParams.get('text');
+            if (text) setSpotifyUrl(text);
+        }
     }, []);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
