@@ -7,6 +7,21 @@
   --ios-gray: #8E8E93;
   --ios-light-gray: #F2F2F7;
   --ios-card-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  --ios-card-bg: #ffffff;
+  --ios-header-bg: #ffffff;
+  --ios-border-color: #e5e7eb;
+  --ios-text-primary: #111827;
+  --ios-text-secondary: #6b7280;
+  --ios-text-muted: #9ca3af;
+  --ios-button-primary: #3b82f6;
+  --ios-button-primary-hover: #2563eb;
+  --ios-button-secondary-bg: #ffffff;
+  --ios-button-secondary-hover: #f9fafb;
+  --ios-input-bg: #ffffff;
+  --ios-input-border: #e5e7eb;
+  --ios-input-focus: rgba(59, 130, 246, 0.2);
+  --ios-own-card-bg: #eff6ff;
+  --ios-own-card-border: #dbeafe;
   --font-manrope: var(--font-manrope);
 }
 
@@ -16,6 +31,21 @@
     --foreground: #ededed;
     --ios-light-gray: #1C1C1E;
     --ios-card-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    --ios-card-bg: #1C1C1E;
+    --ios-header-bg: #000000;
+    --ios-border-color: #2C2C2E;
+    --ios-text-primary: #ffffff;
+    --ios-text-secondary: #8E8E93;
+    --ios-text-muted: #636366;
+    --ios-button-primary: #3b82f6;
+    --ios-button-primary-hover: #2563eb;
+    --ios-button-secondary-bg: #1C1C1E;
+    --ios-button-secondary-hover: #2C2C2E;
+    --ios-input-bg: #1C1C1E;
+    --ios-input-border: #2C2C2E;
+    --ios-input-focus: rgba(59, 130, 246, 0.3);
+    --ios-own-card-bg: #1e293b;
+    --ios-own-card-border: #1e40af;
   }
 }
 
@@ -39,7 +69,7 @@ body {
   font-family: var(--font-manrope), sans-serif;
   font-weight: 700;
   font-size: 1.25rem;
-  color: #171717;
+  color: var(--ios-text-primary);
   animation: fadeInUp 0.4s ease-out;
 }
 
@@ -62,13 +92,13 @@ body {
 
 /* iOS Card Styles - Ohne @apply */
 .ios-card {
-  background-color: white;
+  background-color: var(--ios-card-bg);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--ios-card-shadow);
   margin-bottom: 0.5rem;
   transition: all 0.2s ease;
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--ios-border-color);
 }
 
 .ios-card:hover {
@@ -76,14 +106,14 @@ body {
 }
 
 .ios-card--own {
-  border-color: #dbeafe;
-  background-color: #eff6ff;
+  border-color: var(--ios-own-card-border);
+  background-color: var(--ios-own-card-bg);
 }
 
 /* iOS Header - Ohne @apply */
 .ios-header {
-  background-color: white;
-  border-bottom: 1px solid #e5e7eb;
+  background-color: var(--ios-header-bg);
+  border-bottom: 1px solid var(--ios-border-color);
   padding: 1rem 1.5rem;
   position: sticky;
   top: 0;
@@ -94,13 +124,13 @@ body {
 .ios-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--ios-text-primary);
   line-height: 1.2;
 }
 
 .ios-subtitle {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--ios-text-secondary);
   margin-top: 0.25rem;
 }
 
@@ -122,7 +152,7 @@ body {
 .ios-section-title {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--ios-text-primary);
   margin-bottom: 0.5rem;
   padding: 0 0.5rem;
 }
@@ -142,7 +172,7 @@ body {
 
 .ios-button-primary {
   width: 100%;
-  background-color: #3b82f6;
+  background-color: var(--ios-button-primary);
   color: white;
   padding: 1rem 1.5rem;
   border-radius: 1rem;
@@ -156,28 +186,28 @@ body {
 }
 
 .ios-button-primary:hover {
-  background-color: #2563eb;
+  background-color: var(--ios-button-primary-hover);
 }
 
 /* iOS Typography */
 .ios-card h3 {
-  color: #111827;
+  color: var(--ios-text-primary);
 }
 
 .ios-card p {
-  color: #6b7280;
+  color: var(--ios-text-secondary);
 }
 
 /* iOS Form Styles - Ohne @apply */
 .ios-back-button {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #3b82f6;
+  color: var(--ios-button-primary);
   transition: color 0.2s ease;
 }
 
 .ios-back-button:hover {
-  color: #2563eb;
+  color: var(--ios-button-primary-hover);
 }
 
 .ios-form-group {
@@ -190,34 +220,34 @@ body {
   display: block;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--ios-text-secondary);
 }
 
 .ios-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--ios-input-border);
   border-radius: 0.75rem;
-  background-color: white;
-  color: #111827;
+  background-color: var(--ios-input-bg);
+  color: var(--ios-text-primary);
   transition: all 0.2s ease;
 }
 
 .ios-input::placeholder {
-  color: #9ca3af;
+  color: var(--ios-text-muted);
 }
 
 .ios-input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  border-color: var(--ios-button-primary);
+  box-shadow: 0 0 0 2px var(--ios-input-focus);
 }
 
 .ios-button-secondary {
   width: 100%;
-  background-color: white;
-  border: 1px solid #e5e7eb;
-  color: #374151;
+  background-color: var(--ios-button-secondary-bg);
+  border: 1px solid var(--ios-border-color);
+  color: var(--ios-text-secondary);
   padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
   font-weight: 600;
@@ -229,7 +259,7 @@ body {
 }
 
 .ios-button-secondary:hover {
-  background-color: #f9fafb;
+  background-color: var(--ios-button-secondary-hover);
 }
 
 /* iOS Settings Styles */

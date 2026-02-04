@@ -12,7 +12,7 @@ export default async function SettingsPage() {
     const currentUser = code ? await User.findById(code).lean() : null;
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen" style={{ backgroundColor: 'var(--background)' }}>
             {/* iOS Header */}
             <header className="ios-header">
                 <div className="flex items-center justify-between">
@@ -46,12 +46,12 @@ export default async function SettingsPage() {
                             </div>
 
                             {/* Username */}
-                            <h2 className="text-xl font-bold text-gray-900 mb-1">
+                            <h2 className="text-xl font-bold text-gray-900 mb-1" style={{ color: 'var(--ios-text-primary)' }}>
                                 {currentUser?.name || "Unbekannter User"}
                             </h2>
 
                             {/* Status */}
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-gray-500" style={{ color: 'var(--ios-text-secondary)' }}>
                                 {currentUser ? "Mein Profil" : "Nicht angemeldet"}
                             </p>
                         </div>
@@ -70,8 +70,8 @@ export default async function SettingsPage() {
                                         <span className="text-blue-600">👤</span>
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-gray-900">Profil bearbeiten</h3>
-                                        <p className="text-sm text-gray-500">Name und Avatar ändern</p>
+                                        <h3 className="font-semibold text-gray-900" style={{ color: 'var(--ios-text-primary)' }}>Profil bearbeiten</h3>
+                                        <p className="text-sm text-gray-500" style={{ color: 'var(--ios-text-secondary)' }}>Name und Avatar ändern</p>
                                     </div>
                                 </div>
                                 <div className="text-gray-400">
@@ -96,8 +96,8 @@ export default async function SettingsPage() {
                                         <span className="text-purple-600">🔔</span>
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-gray-900">Benachrichtigungen</h3>
-                                        <p className="text-sm text-gray-500">Push-Einstellungen</p>
+                                        <h3 className="font-semibold text-gray-900" style={{ color: 'var(--ios-text-primary)' }}>Benachrichtigungen</h3>
+                                        <p className="text-sm text-gray-500" style={{ color: 'var(--ios-text-secondary)' }}>Push-Einstellungen</p>
                                     </div>
                                 </div>
                                 <div className="text-gray-400">
@@ -116,8 +116,8 @@ export default async function SettingsPage() {
                                         <span className="text-gray-600">🔒</span>
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-gray-900">Datenschutz</h3>
-                                        <p className="text-sm text-gray-500">Daten und Sicherheit</p>
+                                        <h3 className="font-semibold text-gray-900" style={{ color: 'var(--ios-text-primary)' }}>Datenschutz</h3>
+                                        <p className="text-sm text-gray-500" style={{ color: 'var(--ios-text-secondary)' }}>Daten und Sicherheit</p>
                                     </div>
                                 </div>
                                 <div className="text-gray-400">
@@ -157,8 +157,8 @@ export default async function SettingsPage() {
                                         <span className="text-red-600">🚪</span>
                                     </div>
                                     <div>
-                                        <h3 className="font-semibold text-red-600">Abmelden</h3>
-                                        <p className="text-sm text-gray-500">Aus App ausloggen</p>
+                                        <h3 className="font-semibold text-red-600" style={{ color: '#ef4444' }}>Abmelden</h3>
+                                        <p className="text-sm text-gray-500" style={{ color: 'var(--ios-text-secondary)' }}>Aus App ausloggen</p>
                                     </div>
                                 </div>
                                 <div className="text-gray-400">

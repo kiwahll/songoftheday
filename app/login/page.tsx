@@ -49,7 +49,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <div className="min-h-screen bg-gray-50 flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
             {/* iOS Header */}
             <header className="ios-header">
                 <div className="flex items-center justify-between">
@@ -70,8 +70,8 @@ export default function LoginPage() {
                         <div className="w-20 h-20 mx-auto bg-blue-100 rounded-3xl flex items-center justify-center mb-4">
                             <span className="text-3xl">🎵</span>
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Song of the Day</h2>
-                        <p className="text-gray-600">Gib deinen Einladungscode ein um beizutreten</p>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2" style={{ color: 'var(--ios-text-primary)' }}>Song of the Day</h2>
+                        <p className="text-gray-600" style={{ color: 'var(--ios-text-secondary)' }}>Gib deinen Einladungscode ein um beizutreten</p>
                     </div>
 
                     {/* Invite Code Form */}
@@ -105,9 +105,9 @@ export default function LoginPage() {
 
                     {/* Help Text */}
                     <div className="text-center mt-6">
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500" style={{ color: 'var(--ios-text-muted)' }}>
                             Du hast keinen Code?{' '}
-                            <Link href="/signup" className="text-blue-500 font-semibold hover:text-blue-600">
+                            <Link href="/signup" className="text-blue-500 font-semibold hover:text-blue-600" style={{ color: 'var(--ios-button-primary)' }}>
                                 Fordere eine Einladung an
                             </Link>
                         </p>
