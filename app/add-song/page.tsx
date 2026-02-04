@@ -48,12 +48,12 @@ export default function AddSongPage() {
     };
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen" style={{ backgroundColor: 'var(--background)' }}>
             {/* Back Button */}
             <div className="p-4">
                 <Link
                     href="/"
-                    className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+                    className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors" style={{ color: 'var(--ios-text-secondary)' }}
                 >
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -65,14 +65,14 @@ export default function AddSongPage() {
             {/* Content */}
             <div className="max-w-md mx-auto px-4 py-8">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Song hinzufügen</h1>
-                    <p className="text-gray-600">Füge deinen Song des Tages hinzu</p>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2" style={{ color: 'var(--ios-text-primary)' }}>Song hinzufügen</h1>
+                    <p className="text-gray-600" style={{ color: 'var(--ios-text-secondary)' }}>Füge deinen Song des Tages hinzu</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Input Field */}
                     <div>
-                        <label htmlFor="spotifyUrl" className="block text-sm font-medium text-gray-700 mb-2">
+                        <label htmlFor="spotifyUrl" className="block text-sm font-medium text-gray-700 mb-2" style={{ color: 'var(--ios-text-secondary)' }}>
                             Spotify URL
                         </label>
                         <input
@@ -81,10 +81,10 @@ export default function AddSongPage() {
                             value={spotifyUrl}
                             onChange={(e) => setSpotifyUrl(e.target.value)}
                             placeholder="https://open.spotify.com/track/..."
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all" style={{ backgroundColor: 'var(--ios-input-bg)', borderColor: 'var(--ios-input-border)', color: 'var(--ios-text-primary)' }}
                             required
                         />
-                        <p className="mt-2 text-sm text-gray-500">
+                        <p className="mt-2 text-sm text-gray-500" style={{ color: 'var(--ios-text-muted)' }}>
                             Kopiere die Spotify URL und füge sie hier ein
                         </p>
                     </div>
@@ -107,9 +107,9 @@ export default function AddSongPage() {
                 </form>
 
                 {/* Help Section */}
-                <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-                    <h3 className="font-medium text-gray-900 mb-2">Wie finde ich die Spotify URL?</h3>
-                    <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
+                <div className="mt-8 p-4 bg-gray-50 rounded-lg" style={{ backgroundColor: 'var(--ios-light-gray)' }}>
+                    <h3 className="font-medium text-gray-900 mb-2" style={{ color: 'var(--ios-text-primary)' }}>Wie finde ich die Spotify URL?</h3>
+                    <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside" style={{ color: 'var(--ios-text-secondary)' }}>
                         <li>Öffne den Song in der Spotify App</li>
                         <li>Klicke auf "Teilen"</li>
                         <li>Klicke auf "Kopieren"</li>

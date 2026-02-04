@@ -17,7 +17,7 @@ export default async function Home() {
     });
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen" style={{ backgroundColor: 'var(--background)' }}>
             {/* iOS Header */}
             <header className="ios-header">
                 <div className="flex items-center justify-between">
@@ -26,7 +26,7 @@ export default async function Home() {
                         <p className="ios-subtitle">{today}</p>
                     </div>
                     <div className="ios-header-icon">
-                        <Link href="/settings" className="text-gray-600 hover:text-gray-900 transition-colors">
+                        <Link href="/settings" className="text-gray-600 hover:text-gray-900 transition-colors" style={{ color: 'var(--ios-text-secondary)' }}>
                             ⚙️
                         </Link>
                     </div>
