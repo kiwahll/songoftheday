@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import User from './lib/models/User'
+import dbConnect from './lib/mongodb'
 
 export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl
@@ -14,9 +16,11 @@ export async function proxy(request: NextRequest) {
         return NextResponse.next()
     }
 
-    const code = request.cookies.get('code')?.value
+    const code = request.cookies.get('code')?.value;
+    await dbConnect();
+    const codeValid = await User.findById(code);
 
-    if (!code) {
+    if (!codeValid) {
         return NextResponse.redirect(new URL('/login', request.url))
     }
 
@@ -24,7 +28,7 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+    matcher: [
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    ],
 }

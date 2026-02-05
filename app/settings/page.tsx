@@ -71,7 +71,27 @@ export default async function SettingsPage() {
                                     </div>
                                     <div>
                                         <h3 className="font-semibold text-gray-900" style={{ color: 'var(--ios-text-primary)' }}>Profil bearbeiten</h3>
-                                        <p className="text-sm text-gray-500" style={{ color: 'var(--ios-text-secondary)' }}>Name und Avatar ändern</p>
+                                        <p className="text-sm text-gray-500" style={{ color: 'var(--ios-text-secondary)' }}>Namen und Avatar ändern</p>
+                                    </div>
+                                </div>
+                                <div className="text-gray-400">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </Link>
+
+                        {/* Freunde */}
+                        <Link href="/settings/friends" className="ios-card ios-settings-item">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+                                        <span className="text-orange-600">👥</span>
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-900" style={{ color: 'var(--ios-text-primary)' }}>Freunde</h3>
+                                        <p className="text-sm text-gray-500" style={{ color: 'var(--ios-text-secondary)' }}>Freunde hinzufügen / akzeptieren</p>
                                     </div>
                                 </div>
                                 <div className="text-gray-400">
