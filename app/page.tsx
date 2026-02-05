@@ -1,19 +1,43 @@
 import SongEntrySlot from "@/lib/components/SongEntrySlot";
-import User from "@/lib/models/User";
-import dbConnect from "@/lib/mongodb";
 import Link from 'next/link';
+import User from "@/lib/models/User";
+import Friend from "@/lib/models/Friend";
+import dbConnect from "@/lib/mongodb";
 import { cookies } from "next/headers";
 
 export default async function Home() {
-    await dbConnect();
-    const cookieStore = await cookies();
-    const code = cookieStore.get("code")?.value;
-    const users = await User.find({ _id: { $ne: code } }).lean();
+    let friends = [];
+    try {
+        // Direkte Datenbank-Abfrage
+        await dbConnect();
+        
+        const cookieStore = await cookies();
+        const userCode = cookieStore.get("code")?.value;
+        
+        if (userCode) {
+            // User validieren
+            const user = await User.findById(userCode);
+            if (user) {
+                // Alle Friendships finden wo der User beteiligt ist
+                const friendships = await Friend.find({
+                    users: userCode
+                }).populate('users', 'name email');
+                
+                // Friends extrahieren (nicht der aktuelle User)
+                friends = friendships.map(friendship => {
+                    const friendUser = friendship.users.find((u: any) => u._id.toString() !== userCode);
+                    return friendUser;
+                }).filter(item => item); // Nur gültige Friends
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching friends data:', error);
+    }
 
-    const today = new Date().toLocaleDateString('de-DE', { 
-        weekday: 'long', 
-        day: 'numeric', 
-        month: 'long' 
+    const today = new Date().toLocaleDateString('de-DE', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
     });
 
     return (
@@ -44,7 +68,7 @@ export default async function Home() {
                 <div className="ios-section">
                     <h2 className="ios-section-title">Freunde</h2>
                     <div className="ios-feed">
-                        {users.map((user) => (
+                        {friends.map((user: any) => (
                             <SongEntrySlot key={user._id} user={user} />
                         ))}
                     </div>
@@ -52,7 +76,7 @@ export default async function Home() {
 
                 {/* Fester Song hinzufügen Button */}
                 <div className="ios-action-button">
-                    <Link 
+                    <Link
                         href="/add-song"
                         className="ios-button-primary"
                     >
