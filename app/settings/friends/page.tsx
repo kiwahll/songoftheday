@@ -155,7 +155,7 @@ export default function FriendsPage() {
                                 disabled={loading}
                                 className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
                             >
-                                {loading ? 'Senden...' : 'Senden'}
+                                {loading ? '...' : '+'}
                             </button>
                         </form>
                         {message && (
