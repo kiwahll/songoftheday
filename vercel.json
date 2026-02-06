@@ -2,17 +2,11 @@
     "crons": [
         {
             "path": "/api/notify/morning",
-            "schedule": "0 9 * * *",
-            "headers": {
-                "Authorization": "Bearer ${CRON_SECRET}"
-            }
+            "schedule": "0 9 * * *"
         },
         {
             "path": "/api/notify/evening",
-            "schedule": "0 17 * * *",
-            "headers": {
-                "Authorization": "Bearer ${CRON_SECRET}"
-            }
+            "schedule": "0 17 * * *"
         }
     ]
 }
