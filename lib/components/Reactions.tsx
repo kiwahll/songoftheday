@@ -23,7 +23,6 @@ export default function Reactions({ entryId, currentUserId, reactionsData, isOwn
     useEffect(() => {
         if (reactionsData) setReactions(JSON.parse(reactionsData));
     }, []);
-    console.log(reactionsData);
 
     // Find user's existing reaction
     const userReaction = reactions.find(r => r.users.includes(currentUserId || ''));
