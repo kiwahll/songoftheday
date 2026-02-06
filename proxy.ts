@@ -1,26 +1,25 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import User from './lib/models/User'
-import dbConnect from './lib/mongodb'
+import { auth } from './lib/auth'
 
 export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl
 
-    if (pathname.startsWith('/login')) {
-        return NextResponse.next()
-    }
-
-    if (pathname.startsWith('/_next') ||
+    // Public routes - keine Auth benötigt
+    if (pathname.startsWith('/login') || 
+        pathname.startsWith('/api/auth') || // better-auth routes
+        pathname.startsWith('/_next') ||
         pathname.startsWith('/favicon') ||
         pathname.includes('.')) {
         return NextResponse.next()
     }
 
-    const code = request.cookies.get('code')?.value;
-    await dbConnect();
-    const codeValid = await User.findById(code);
+    // Better-auth Session check
+    const session = await auth.api.getSession({
+        headers: request.headers
+    })
 
-    if (!codeValid) {
+    if (!session?.user) {
         return NextResponse.redirect(new URL('/login', request.url))
     }
 

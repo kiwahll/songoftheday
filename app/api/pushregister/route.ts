@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { headers } from 'next/headers';
 import dbConnect from '@/lib/mongodb';
 import PushRegistration from '@/lib/models/PushRegistration';
-import User from '@/lib/models/User';
+import { auth } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
     try {
@@ -18,9 +18,10 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Get current user from cookies
-        const cookieStore = await cookies();
-        const code = cookieStore.get("code")?.value;
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+        const code = session?.user.id;
 
         if (!code) {
             return NextResponse.json(
@@ -29,18 +30,9 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Check if user exists
-        const user = await User.findById(code);
-        if (!user) {
-            return NextResponse.json(
-                { error: 'User not found' },
-                { status: 404 }
-            );
-        }
-
         // Check if token already exists for this user
         const existingRegistration = await PushRegistration.findOne({
-            user: user._id
+            user: code
         });
 
         if (existingRegistration) {
@@ -52,7 +44,7 @@ export async function POST(request: NextRequest) {
 
         // Create new push registration
         const pushRegistration = await PushRegistration.create({
-            user: user._id,
+            user: code,
             subscription: subscription
         });
 
@@ -77,9 +69,10 @@ export async function GET(request: NextRequest) {
     try {
         await dbConnect();
 
-        // Get current user from cookies
-        const cookieStore = await cookies();
-        const code = cookieStore.get("code")?.value;
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+        const code = session?.user.id;
 
         if (!code) {
             return NextResponse.json(
@@ -88,18 +81,9 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        // Check if user exists
-        const user = await User.findById(code);
-        if (!user) {
-            return NextResponse.json(
-                { error: 'User not found' },
-                { status: 404 }
-            );
-        }
-
         // Check if user has push registration
         const existingRegistration = await PushRegistration.findOne({
-            user: user._id
+            user: code
         });
 
         return NextResponse.json(
@@ -123,10 +107,11 @@ export async function DELETE(request: NextRequest) {
     try {
         await dbConnect();
 
-        // Get current user from cookies
-        const cookieStore = await cookies();
-        const code = cookieStore.get("code")?.value;
-
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+        const code = session?.user.id;
+        
         if (!code) {
             return NextResponse.json(
                 { error: 'User not authenticated' },
@@ -134,18 +119,9 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
-        // Check if user exists
-        const user = await User.findById(code);
-        if (!user) {
-            return NextResponse.json(
-                { error: 'User not found' },
-                { status: 404 }
-            );
-        }
-
         // Delete all push registrations for this user
         const result = await PushRegistration.deleteMany({
-            user: user._id
+            user: code
         });
 
         return NextResponse.json(

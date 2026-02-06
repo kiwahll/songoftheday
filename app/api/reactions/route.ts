@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Entry from '@/lib/models/Entry';
-import User from '@/lib/models/User';
 import dbConnect from '@/lib/mongodb';
-import { cookies } from 'next/headers';
+import { headers } from 'next/headers';
+import { auth } from "@/lib/auth";
 
 export async function POST(
     request: NextRequest
@@ -10,22 +10,14 @@ export async function POST(
     try {
         await dbConnect();
 
-        // 1. User ID aus Cookie holen
-        const cookieStore = await cookies();
-        const userCode = cookieStore.get("code")?.value;
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+        const userCode = session?.user.id;
 
         if (!userCode) {
             return NextResponse.json(
                 { error: "Kein Login vorhanden" },
-                { status: 401 }
-            );
-        }
-
-        // 2. User validieren
-        const user = await User.findById(userCode);
-        if (!user) {
-            return NextResponse.json(
-                { error: "Ungültiger User" },
                 { status: 401 }
             );
         }

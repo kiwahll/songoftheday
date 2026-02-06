@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
-import User from '@/lib/models/User';
 import Entry from '@/lib/models/Entry';
 import PushRegistration from '@/lib/models/PushRegistration';
 import webPush from "web-push";
+import { getDb } from '@/lib/auth';
 
 webPush.setVapidDetails(
     'mailto:your-email@example.com',
@@ -19,7 +19,6 @@ export async function GET(
         await dbConnect();
         const { time } = await params;
 
-        console.log(time);
         let message = {}
         if (time == "morning") {
             message = {
@@ -40,7 +39,7 @@ export async function GET(
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
-        const allUsers = await User.find({});
+        const allUsers = await getDb().collection("user").find({}).toArray();
         const usersWithoutTodayEntry = [];
 
         for (const user of allUsers) {
