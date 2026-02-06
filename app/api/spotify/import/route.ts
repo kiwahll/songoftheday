@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import Entry from '@/lib/models/Entry';
 import dbConnect from '@/lib/mongodb';
 import { fetchSpotifyTrack } from '@/lib/spotify';
-import { cookies } from 'next/headers';
-import { Model } from 'mongoose';
+import { headers } from 'next/headers';
+import { notifySong } from '@/lib/notifications';
+import { auth } from "@/lib/auth";
 
 // Hilfsfunktion: Spotify Track ID aus URL extrahieren
 function extractSpotifyId(url: string): string | null {
@@ -27,8 +28,10 @@ async function checkTodayEntry(userId: string) {
 export async function POST(request: NextRequest) {
     try {
         await dbConnect();
-        const cookieStore = await cookies();
-        const code = cookieStore.get("code");
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+        const code = session?.user.id;
         const { spotifyUrl } = await request.json();
 
         console.log(code);
@@ -47,7 +50,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 1. Tageslimit prüfen
-        const todayEntry = await checkTodayEntry(code.value);
+        const todayEntry = await checkTodayEntry(code);
         if (todayEntry) {
             await Entry.findByIdAndDelete(todayEntry._id);
         }
@@ -70,9 +73,10 @@ export async function POST(request: NextRequest) {
             artist: trackData.artists[0]?.name || 'Unknown Artist',
             spotifyId: trackData.id,
             imageSrc: trackData.album.images[0]?.url || null,
-            user: code.value
+            user: code
         });
 
+        notifySong(code);
         return NextResponse.json(entry, { status: 201 });
 
     } catch (error) {

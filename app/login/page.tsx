@@ -1,52 +1,28 @@
 "use client";
 
-import Link from 'next/link';
 import { useState } from 'react';
+import { createAuthClient } from "better-auth/react";
+
+const authClient = createAuthClient({
+    baseURL: process.env.NEXT_PUBLIC_APP_URL
+});
 
 export default function LoginPage() {
-    const [error, setError] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    async function handleSubmit(formData: FormData) {
-        const code = formData.get('code') as string;
-
-        if (!code) {
-            setError('Bitte gib einen Einladungscode ein');
-            return;
-        }
-
+    const handleGoogleLogin = async () => {
         setIsLoading(true);
-        setError('');
-
         try {
-            const response = await fetch('/api/auth', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ code }),
+            await authClient.signIn.social({
+                provider: "google",
+                callbackURL: "/"
             });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                setError(data.error || 'Authentifizierung fehlgeschlagen');
-                return;
-            }
-
-            // Erfolgreiche Authentifizierung - Cookie wird server-seitig gesetzt
-            console.log('Auth erfolgreich:', data.message);
-            
-            // Redirect zur Startseite
-            window.location.href = '/';
-
-        } catch (err) {
-            setError('Netzwerkfehler. Bitte versuche es später erneut.');
-            console.error('Network error:', err);
+        } catch (error) {
+            console.error('Google Login Error:', error);
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col" style={{ backgroundColor: 'var(--background)' }}>
@@ -71,66 +47,17 @@ export default function LoginPage() {
                             <span className="text-3xl">🎵</span>
                         </div>
                         <h2 className="text-2xl font-bold text-gray-900 mb-2" style={{ color: 'var(--ios-text-primary)' }}>Song of the Day</h2>
-                        <p className="text-gray-600" style={{ color: 'var(--ios-text-secondary)' }}>Gib deinen Einladungscode ein um beizutreten</p>
+                        <p className="text-gray-600" style={{ color: 'var(--ios-text-secondary)' }}>Melde dich mit deinem Google-Konto an</p>
                     </div>
 
-                    {/* Invite Code Form */}
-                    {error && (
-                        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                            {error}
-                        </div>
-                    )}
-
-                    <form action={handleSubmit} className="space-y-4">
-                        <div className="ios-form-group">
-                            <label className="ios-label">Einladungscode</label>
-                            <input
-                                name='code'
-                                type="text"
-                                className="ios-input text-center text-lg tracking-widest font-mono"
-                                placeholder="XXXX-XXXX"
-                                maxLength={24}
-                                disabled={isLoading}
-                            />
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="ios-button-primary"
-                            disabled={isLoading}
-                        >
-                            {isLoading ? 'Wird überprüft...' : 'Beitreten'}
-                        </button>
-                    </form>
-
-                    {/* Help Text */}
-                    <div className="text-center mt-6">
-                        <p className="text-sm text-gray-500" style={{ color: 'var(--ios-text-muted)' }}>
-                            Du hast keinen Code?{' '}
-                            <Link href="/signup" className="text-blue-500 font-semibold hover:text-blue-600" style={{ color: 'var(--ios-button-primary)' }}>
-                                Fordere eine Einladung an
-                            </Link>
-                        </p>
-                    </div>
-
-                    {/* Divider
-                    <div className="flex items-center my-6">
-                        <div className="flex-1 h-px bg-gray-300"></div>
-                        <span className="px-4 text-sm text-gray-500">oder</span>
-                        <div className="flex-1 h-px bg-gray-300"></div>
-                    </div> */}
-
-                    {/* Social Login
-                    <div className="space-y-3">
-                        <button className="ios-button-secondary">
-                            <span className="mr-2">🍎</span>
-                            Mit Apple fortfahren
-                        </button>
-                        <button className="ios-button-secondary">
-                            <span className="mr-2">🎵</span>
-                            Mit Spotify fortfahren
-                        </button>
-                    </div> */}
+                    {/* Google Login Button */}
+                    <button
+                        onClick={handleGoogleLogin}
+                        className="ios-button-primary w-full"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Wird verbunden...' : 'Mit Google fortfahren'}
+                    </button>
                 </div>
             </main>
         </div>

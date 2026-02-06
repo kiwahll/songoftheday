@@ -45,6 +45,13 @@ SPOTIFY_CLIENT_SECRET=deine_spotify_client_secret
 
 # MongoDB Connection
 MONGODB_URI=mongodb://localhost:27017/songoftheday
+
+# Push Benachrichtigugnen
+NEXT_PUBLIC_VAPID_PUBLIC_KEY=
+VAPID_PRIVATE_KEY=
+
+# Vercel Cron Job Auth
+CRON_SECRET=
 ```
 
 ### 4. Spotify Developer Setup

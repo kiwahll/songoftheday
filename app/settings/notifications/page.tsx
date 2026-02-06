@@ -55,10 +55,11 @@ export default function NotificationsPage() {
     }
 
     async function subscribePush() {
-        const registration = await navigator.serviceWorker.register("/sw.js");
-
         const permission = await Notification.requestPermission();
         if (permission !== "granted") return;
+
+        // Service Worker bereits in layout.tsx registriert - holen der existierenden Registrierung
+        const registration = await navigator.serviceWorker.ready;
 
         const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,

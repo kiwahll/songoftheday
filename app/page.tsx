@@ -1,34 +1,32 @@
 import SongEntrySlot from "@/lib/components/SongEntrySlot";
 import Link from 'next/link';
-import User from "@/lib/models/User";
 import Friend from "@/lib/models/Friend";
 import dbConnect from "@/lib/mongodb";
-import { cookies } from "next/headers";
+import { auth } from "@/lib/auth";
+import PushNotificationToast from "@/components/PushNotificationToast";
+import { headers } from "next/headers";
 
 export default async function Home() {
     let friends = [];
+    let currentUser = null;
+    
     try {
-        // Direkte Datenbank-Abfrage
-        await dbConnect();
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
         
-        const cookieStore = await cookies();
-        const userCode = cookieStore.get("code")?.value;
-        
-        if (userCode) {
-            // User validieren
-            const user = await User.findById(userCode);
-            if (user) {
-                // Alle Friendships finden wo der User beteiligt ist
-                const friendships = await Friend.find({
-                    users: userCode
-                }).populate('users', 'name email');
-                
-                // Friends extrahieren (nicht der aktuelle User)
-                friends = friendships.map(friendship => {
-                    const friendUser = friendship.users.find((u: any) => u._id.toString() !== userCode);
-                    return friendUser;
-                }).filter(item => item); // Nur gültige Friends
-            }
+        if (session?.user) {
+            currentUser = session.user;
+            await dbConnect();
+            
+            const friendships = await Friend.find({
+                users: currentUser.id
+            }).populate('users', 'name email');
+            
+            friends = friendships.map(friendship => {
+                const friendUser = friendship.users.find((u: any) => u._id.toString() !== currentUser.id);
+                return friendUser;
+            }).filter(item => item);
         }
     } catch (error) {
         console.error('Error fetching friends data:', error);
@@ -56,6 +54,8 @@ export default async function Home() {
                     </div>
                 </div>
             </header>
+
+            <PushNotificationToast />
 
             {/* Feed Container */}
             <main className="ios-feed-container">

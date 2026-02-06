@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
-import User from '@/lib/models/User';
 import Entry from '@/lib/models/Entry';
 import PushRegistration from '@/lib/models/PushRegistration';
 import webPush from "web-push";
+import { getDb } from '@/lib/auth';
 
 webPush.setVapidDetails(
     'mailto:your-email@example.com',
@@ -11,17 +11,35 @@ webPush.setVapidDetails(
     process.env.VAPID_PRIVATE_KEY!
 );
 
-export async function GET() {
+export async function GET(
+    request: Request,
+    { params }: { params: { time: string } }
+) {
     try {
         await dbConnect();
+        const { time } = await params;
+
+        let message = {}
+        if (time == "morning") {
+            message = {
+                "title": "⏰ Guten Morgen",
+                "body": "Heute schon Musik gehört?"
+            }
+        } else if (time == "evening") {
+            message = {
+                title: "⏰ Erinnerung",
+                body: "Was ist dein heutiger Song of the Day?",
+            }
+        } else {
+            throw new Error("No time Parameter!");
+        }
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
-        const allUsers = await User.find({});
-
+        const allUsers = await getDb().collection("user").find({}).toArray();
         const usersWithoutTodayEntry = [];
 
         for (const user of allUsers) {
@@ -53,14 +71,11 @@ export async function GET() {
 
         const pushSubscriptions = subscriptions.map(s => JSON.parse(s.subscription));
         const notificationSent = new Set();
-        const payload = JSON.stringify({
-            title: "⏰ Reminder",
-            body: "You haven't created an entry today",
-        });
+        const payload = JSON.stringify(message);
 
         for (const subscription of pushSubscriptions) {
             const endpointKey = subscription.endpoint;
-            
+
             if (!notificationSent.has(endpointKey)) {
                 try {
                     await webPush.sendNotification(subscription, payload);
