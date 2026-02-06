@@ -73,6 +73,52 @@ export async function POST(request: NextRequest) {
     }
 }
 
+export async function GET(request: NextRequest) {
+    try {
+        await dbConnect();
+
+        // Get current user from cookies
+        const cookieStore = await cookies();
+        const code = cookieStore.get("code")?.value;
+
+        if (!code) {
+            return NextResponse.json(
+                { error: 'User not authenticated' },
+                { status: 401 }
+            );
+        }
+
+        // Check if user exists
+        const user = await User.findById(code);
+        if (!user) {
+            return NextResponse.json(
+                { error: 'User not found' },
+                { status: 404 }
+            );
+        }
+
+        // Check if user has push registration
+        const existingRegistration = await PushRegistration.findOne({
+            user: user._id
+        });
+
+        return NextResponse.json(
+            { 
+                hasRegistration: !!existingRegistration,
+                registrationId: existingRegistration?._id
+            },
+            { status: 200 }
+        );
+
+    } catch (error) {
+        console.error('Push registration check error:', error);
+        return NextResponse.json(
+            { error: 'Internal server error' },
+            { status: 500 }
+        );
+    }
+}
+
 export async function DELETE(request: NextRequest) {
     try {
         await dbConnect();

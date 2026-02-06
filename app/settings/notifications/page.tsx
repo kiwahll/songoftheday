@@ -1,16 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getToken } from 'firebase/messaging';
 
 export default function NotificationsPage() {
-    const [settings, setSettings] = useState({
-        newSongs: true,
-        friendRequests: true,
-        songReactions: true,
-        dailyReminder: false,
-    });
+    const [hasPushRegistration, setHasPushRegistration] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     function urlBase64ToUint8Array(base64String: string) {
         const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -19,9 +14,45 @@ export default function NotificationsPage() {
         return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
     }
 
-    const handleToggleSetting = (setting: string) => {
-        setSettings(prev => ({ ...prev, [setting]: !prev[setting as keyof typeof prev] }));
-    };
+    useEffect(() => {
+        checkPushRegistration();
+    }, []);
+
+    async function checkPushRegistration() {
+        try {
+            const response = await fetch('/api/pushregister', {
+                method: 'GET',
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                setHasPushRegistration(data.hasRegistration);
+            }
+        } catch (error) {
+            console.error('Fehler beim Prüfen der Push-Registration:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    async function unsubscribePush() {
+        try {
+            const response = await fetch('/api/pushregister', {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Push-Registration erfolgreich entfernt:', data);
+                setHasPushRegistration(false);
+            } else {
+                const error = await response.json();
+                console.error('Fehler beim Entfernen der Push-Registration:', error);
+            }
+        } catch (error) {
+            console.error('Fehler beim Entfernen der Push-Registration:', error);
+        }
+    }
 
     async function subscribePush() {
         const registration = await navigator.serviceWorker.register("/sw.js");
@@ -46,6 +77,7 @@ export default function NotificationsPage() {
         if (response.ok) {
             const data = await response.json();
             console.log('Token erfolgreich registriert:', data);
+            setHasPushRegistration(true);
         } else {
             const error = await response.json();
             console.error('Fehler bei Token-Registrierung:', error);
@@ -87,105 +119,30 @@ export default function NotificationsPage() {
                                     </p>
                                 </div>
                             </div>
-                            <button
-                                onClick={() => subscribePush()}
-                                className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors"
-                            >
-                                Aktivieren
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Benachrichtigungs-Einstellungen */}
-                <div className="ios-section">
-                    <h2 className="ios-section-title">Benachrichtigungsarten</h2>
-                    <div className="ios-feed">
-                        {/* Neue Songs */}
-                        <div className="ios-card">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center flex-1">
-                                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
-                                        <span className="text-blue-600 text-lg">🎵</span>
-                                    </div>
-                                    <div className="flex-1">
-                                        <h3 className="font-semibold text-base" style={{ color: 'var(--ios-text-primary)' }}>
-                                            Neue Songs
-                                        </h3>
-                                        <p className="text-sm" style={{ color: 'var(--ios-text-secondary)' }}>
-                                            Wenn Freunde neue Songs teilen
-                                        </p>
-                                    </div>
+                            {!isLoading && (
+                                <>
+                                    {hasPushRegistration ? (
+                                        <button
+                                            onClick={() => unsubscribePush()}
+                                            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+                                        >
+                                            Entfernen
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={() => subscribePush()}
+                                            className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors"
+                                        >
+                                            Aktivieren
+                                        </button>
+                                    )}
+                                </>
+                            )}
+                            {isLoading && (
+                                <div className="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg text-sm font-medium">
+                                    Lade...
                                 </div>
-                                <button
-                                    onClick={() => handleToggleSetting('newSongs')}
-                                    className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${settings.newSongs ? 'bg-blue-600' : 'bg-gray-300'
-                                        }`}
-                                >
-                                    <span
-                                        className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${settings.newSongs ? 'translate-x-6' : 'translate-x-1'
-                                            }`}
-                                    />
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Freundschaftsanfragen */}
-                        <div className="ios-card">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center flex-1">
-                                    <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mr-4">
-                                        <span className="text-orange-600 text-lg">👥</span>
-                                    </div>
-                                    <div className="flex-1">
-                                        <h3 className="font-semibold text-base" style={{ color: 'var(--ios-text-primary)' }}>
-                                            Freundschaftsanfragen
-                                        </h3>
-                                        <p className="text-sm" style={{ color: 'var(--ios-text-secondary)' }}>
-                                            Neue Freundesanfragen und Bestätigungen
-                                        </p>
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={() => handleToggleSetting('friendRequests')}
-                                    className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${settings.friendRequests ? 'bg-blue-600' : 'bg-gray-300'
-                                        }`}
-                                >
-                                    <span
-                                        className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${settings.friendRequests ? 'translate-x-6' : 'translate-x-1'
-                                            }`}
-                                    />
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Tägliche Erinnerung */}
-                        <div className="ios-card">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center flex-1">
-                                    <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mr-4">
-                                        <span className="text-purple-600 text-lg">⏰</span>
-                                    </div>
-                                    <div className="flex-1">
-                                        <h3 className="font-semibold text-base" style={{ color: 'var(--ios-text-primary)' }}>
-                                            Tägliche Erinnerung
-                                        </h3>
-                                        <p className="text-sm" style={{ color: 'var(--ios-text-secondary)' }}>
-                                            Erinnerung an den heutigen Song
-                                        </p>
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={() => handleToggleSetting('dailyReminder')}
-                                    className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${settings.dailyReminder ? 'bg-blue-600' : 'bg-gray-300'
-                                        }`}
-                                >
-                                    <span
-                                        className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${settings.dailyReminder ? 'translate-x-6' : 'translate-x-1'
-                                            }`}
-                                    />
-                                </button>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
