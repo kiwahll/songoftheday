@@ -13,7 +13,7 @@ webPush.setVapidDetails(
 
 export async function GET(
     request: Request,
-    { params }: { params: { time: string } }
+    { params }: { params: Promise<{ time: string }> }
 ) {
     try {
         await dbConnect();
