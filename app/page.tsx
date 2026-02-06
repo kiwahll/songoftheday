@@ -8,21 +8,21 @@ import { headers } from "next/headers";
 
 export default async function Home() {
     let friends = [];
-    let currentUser = null;
-    
+    let currentUser: any = undefined;
+
     try {
         const session = await auth.api.getSession({
             headers: await headers()
         });
-        
+
         if (session?.user) {
             currentUser = session.user;
             await dbConnect();
-            
+
             const friendships = await Friend.find({
                 users: currentUser.id
             }).populate('users', 'name email');
-            
+
             friends = friendships.map(friendship => {
                 const friendUser = friendship.users.find((u: any) => u._id.toString() !== currentUser.id);
                 return friendUser;

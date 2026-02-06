@@ -5,7 +5,7 @@ import dbConnect from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { notifyFriendRequest } from "@/lib/notifications";
-import { auth } from "@/lib/auth";
+import { auth, getDb } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
     try {
@@ -14,9 +14,11 @@ export async function POST(request: NextRequest) {
         const session = await auth.api.getSession({
             headers: await headers()
         });
-        const userCode = session?.user.id;
+        const user = session?.user;
 
-        if (!userCode) {
+        //await getDb().collection("user").findOne({ _id: new ObjectId(senderId) });
+
+        if (!user) {
             return NextResponse.json(
                 { error: "Kein Login vorhanden" },
                 { status: 401 }
@@ -41,7 +43,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 5. Friend anhand des Namens finden
-        const friend = await User.findOne({ name: friendName });
+        const friend = await getDb().collection("user").findOne({ name: friendName });
         if (!friend) {
             return NextResponse.json(
                 { error: "Friend nicht gefunden" },
@@ -53,7 +55,7 @@ export async function POST(request: NextRequest) {
 
         // 6. Doppelte pending Request prüfen
         const existingRequest = await FriendRequest.findOne({
-            user: userCode,
+            user: user.id,
             potentialFriendId: friendId,
             status: FriendRequestStatus.pending
         });
@@ -67,7 +69,7 @@ export async function POST(request: NextRequest) {
 
         // 7. Bestehende Friendship prüfen
         const existingFriendship = await Friend.findOne({
-            users: { $all: [userCode, friendId] }
+            users: { $all: [user.id, friendId] }
         });
 
         if (existingFriendship) {
@@ -79,14 +81,14 @@ export async function POST(request: NextRequest) {
 
         // 8. Neue Friend Request erstellen
         const friendRequest = new FriendRequest({
-            user: userCode,
+            user: user.id,
             potentialFriendId: friendId,
             status: FriendRequestStatus.pending
         });
 
         await friendRequest.save();
 
-        notifyFriendRequest(friendId, userCode);
+        notifyFriendRequest(friendId, user.id);
         return NextResponse.json(
             {
                 message: "Friend Request erfolgreich erstellt",
