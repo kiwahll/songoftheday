@@ -1,8 +1,9 @@
 import dbConnect from '@/lib/mongodb';
+import { ObjectId } from "mongodb";
 import PushRegistration from '@/lib/models/PushRegistration';
-import User from '@/lib/models/User';
 import Friend from '@/lib/models/Friend';
 import webPush from "web-push";
+import { getDb } from './auth';
 
 webPush.setVapidDetails(
     'mailto:your-email@example.com',
@@ -15,7 +16,7 @@ export async function notifyFriendRequest(friendId: string, senderId: string) {
         await dbConnect();
         
         // Get sender name from database
-        const sender = await User.findById(senderId);
+        const sender = await getDb().collection("user").findOne({ _id: new ObjectId(senderId) });
         const senderName = sender?.name || "Jemand";
         
         const message = {
@@ -55,7 +56,7 @@ export async function notifySong(currentUserId: string) {
         await dbConnect();
         
         // Get current user name
-        const currentUser = await User.findById(currentUserId);
+        const currentUser = await getDb().collection("user").findOne({ _id: new ObjectId(currentUserId) });
         const userName = currentUser?.name || "Jemand";
         
         // Find all friends of the current user

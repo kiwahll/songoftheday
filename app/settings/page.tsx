@@ -1,15 +1,15 @@
-import { cookies } from "next/headers";
-import User from "@/lib/models/User";
+import { headers } from "next/headers";
 import dbConnect from "@/lib/mongodb";
 import Link from 'next/link';
+import { auth } from "@/lib/auth";
+import SignOutButton from "@/lib/components/SignOutButton";
 
 export default async function SettingsPage() {
     await dbConnect();
-    const cookieStore = await cookies();
-    const code = cookieStore.get("code")?.value;
-
-    // Aktuellen User holen für Profil-Daten
-    const currentUser = code ? await User.findById(code).lean() : null;
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+    const currentUser = session?.user;
 
     return (
         <div className="min-h-screen" style={{ backgroundColor: 'var(--background)' }}>
@@ -170,24 +170,7 @@ export default async function SettingsPage() {
                         )}
 
                         {/* Abmelden */}
-                        <Link href="/" className="ios-card ios-settings-item">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center">
-                                    <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
-                                        <span className="text-red-600">🚪</span>
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold text-red-600" style={{ color: '#ef4444' }}>Abmelden</h3>
-                                        <p className="text-sm text-gray-500" style={{ color: 'var(--ios-text-secondary)' }}>Aus App ausloggen</p>
-                                    </div>
-                                </div>
-                                <div className="text-gray-400">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </Link>
+                        <SignOutButton />
                     </div>
                 </div>
             </main >
