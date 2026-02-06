@@ -4,6 +4,7 @@ import User from "@/lib/models/User";
 import Friend from "@/lib/models/Friend";
 import dbConnect from "@/lib/mongodb";
 import { cookies } from "next/headers";
+import PushNotificationToast from "@/components/PushNotificationToast";
 
 export default async function Home() {
     let friends = [];
@@ -56,6 +57,8 @@ export default async function Home() {
                     </div>
                 </div>
             </header>
+
+            <PushNotificationToast />
 
             {/* Feed Container */}
             <main className="ios-feed-container">

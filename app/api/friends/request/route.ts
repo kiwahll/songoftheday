@@ -5,6 +5,7 @@ import { FriendRequestStatus } from "@/lib/models/FriendRequest";
 import dbConnect from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { notifyFriendRequest } from "@/lib/notifications";
 
 export async function POST(request: NextRequest) {
     try {
@@ -93,6 +94,7 @@ export async function POST(request: NextRequest) {
         
         await friendRequest.save();
         
+        notifyFriendRequest(friendId, userCode);
         return NextResponse.json(
             { 
                 message: "Friend Request erfolgreich erstellt",

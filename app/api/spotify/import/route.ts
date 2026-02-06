@@ -4,6 +4,7 @@ import dbConnect from '@/lib/mongodb';
 import { fetchSpotifyTrack } from '@/lib/spotify';
 import { cookies } from 'next/headers';
 import { Model } from 'mongoose';
+import { notifySong } from '@/lib/notifications';
 
 // Hilfsfunktion: Spotify Track ID aus URL extrahieren
 function extractSpotifyId(url: string): string | null {
@@ -73,6 +74,7 @@ export async function POST(request: NextRequest) {
             user: code.value
         });
 
+        notifySong(code.value);
         return NextResponse.json(entry, { status: 201 });
 
     } catch (error) {
