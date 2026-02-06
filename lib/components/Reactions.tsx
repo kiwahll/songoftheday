@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface Reaction {
     emoji: string
@@ -17,19 +17,20 @@ interface ReactionsProps {
 const AVAILABLE_EMOJIS = ['❤️', '😂', '🤝', '🔥']
 
 export default function Reactions({ entryId, currentUserId, reactionsData, isOwnCard }: ReactionsProps) {
-    const [isLoading, setIsLoading] = useState(false)
+    const [reactions, setReactions] = useState<Reaction[]>([]);
 
     // Reactions zu Array
-    let reactions: Reaction[] = [];
-    if (reactionsData) reactions = JSON.parse(reactionsData);
+    useEffect(() => {
+        if (reactionsData) setReactions(JSON.parse(reactionsData));
+    }, []);
 
     // Find user's existing reaction
     const userReaction = reactions.find(r => r.users.includes(currentUserId || ''));
 
     const handleReactionSelect = async (emoji: string) => {
-        if (!entryId || !currentUserId) return
+        if (!entryId || !currentUserId) return;
+        const prevReactions: Reaction[] = [...reactions];
 
-        setIsLoading(true)
         try {
             const response = await fetch('/api/reactions', {
                 method: 'POST',
@@ -40,14 +41,28 @@ export default function Reactions({ entryId, currentUserId, reactionsData, isOwn
             });
 
             if (response.ok) {
-                window.location.reload()
+                if (response.ok) {
+                    setReactions(prevReactions => {
+                        const existing = prevReactions.find(r => r.emoji === emoji);
+                        if (existing) {
+                            return prevReactions.map(r =>
+                                r.emoji === emoji
+                                    ? { ...r, users: [...r.users, currentUserId] }
+                                    : r
+                            );
+                        } else {
+                            return [...prevReactions, { emoji, users: [currentUserId] }];
+                        }
+                    });
+                }
             } else {
+                setReactions(prevReactions);
                 console.error('Reaction failed:', response.statusText)
             }
         } catch (error) {
+            setReactions(prevReactions);
             console.error('Reaction error:', error)
         }
-        setIsLoading(false)
     }
 
     // If user has already reacted, show only display
@@ -82,8 +97,7 @@ export default function Reactions({ entryId, currentUserId, reactionsData, isOwn
                 <button
                     key={emoji}
                     onClick={() => handleReactionSelect(emoji)}
-                    disabled={isLoading}
-                    className="hover:scale-110 transition-transform disabled:opacity-50"
+                    className="hover:scale-110 transition-transform"
                 >
                     {emoji}
                 </button>

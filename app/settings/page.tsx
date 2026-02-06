@@ -109,7 +109,7 @@ export default async function SettingsPage() {
                     <h2 className="ios-section-title">App</h2>
                     <div className="ios-feed">
                         {/* Benachrichtigungen */}
-                        <Link href="/" className="ios-card ios-settings-item">
+                        <Link href="/settings/notifications" className="ios-card ios-settings-item">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
                                     <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
