@@ -7,7 +7,7 @@ import React from 'react';
 import PushNotificationModal from '@/components/PushNotificationModal';
 
 export default function AddSongPage() {
-    const [spotifyUrl, setSpotifyUrl] = useState('');
+    const [songUrl, setSongUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPushModal, setShowPushModal] = useState(false);
@@ -16,7 +16,7 @@ export default function AddSongPage() {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const text = params.get('text');
-        if (text) setSpotifyUrl(text);
+        if (text) setSongUrl(text);
     }, []);
 
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
@@ -25,12 +25,12 @@ export default function AddSongPage() {
         setError('');
 
         try {
-            const response = await fetch('/api/spotify/import', {
+            const response = await fetch('/api/song/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ spotifyUrl }),
+                body: JSON.stringify({ songUrl }),
             });
 
             const data = await response.json();
@@ -74,14 +74,14 @@ export default function AddSongPage() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Input Field */}
                     <div>
-                        <label htmlFor="spotifyUrl" className="block text-sm font-medium text-gray-700 mb-2" style={{ color: 'var(--ios-text-secondary)' }}>
-                            Spotify URL
+                        <label htmlFor="songUrl" className="block text-sm font-medium text-gray-700 mb-2" style={{ color: 'var(--ios-text-secondary)' }}>
+                            Song URL
                         </label>
                         <input
                             type="url"
-                            id="spotifyUrl"
-                            value={spotifyUrl}
-                            onChange={(e) => setSpotifyUrl(e.target.value)}
+                            id="songUrl"
+                            value={songUrl}
+                            onChange={(e) => setSongUrl(e.target.value)}
                             placeholder="https://open.spotify.com/track/..."
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all" style={{ backgroundColor: 'var(--ios-input-bg)', borderColor: 'var(--ios-input-border)', color: 'var(--ios-text-primary)' }}
                             required
@@ -101,7 +101,7 @@ export default function AddSongPage() {
                     {/* Submit Button */}
                     <button
                         type="submit"
-                        disabled={isLoading || !spotifyUrl.trim()}
+                        disabled={isLoading || !songUrl.trim()}
                         className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                     >
                         {isLoading ? 'Wird hinzugefügt...' : 'Song hinzufügen'}

@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Entry from '@/lib/models/Entry';
 import dbConnect from '@/lib/mongodb';
-import { fetchSpotifyTrack } from '@/lib/spotify';
 import { headers } from 'next/headers';
 import { notifySong } from '@/lib/notifications';
 import { auth } from "@/lib/auth";
-
-// Hilfsfunktion: Spotify Track ID aus URL extrahieren
-function extractSpotifyId(url: string): string | null {
-    const match = url.match(/spotify\.com\/(?:intl-[^\/]+\/)?track\/([a-zA-Z0-9]+)/);
-    return match ? match[1] : null;
-}
+import { createSoundCloudTrackData, createSpotifyTrackData } from '@/lib/createTrackData';
 
 // Hilfsfunktion: Prüfen ob heute bereits ein Entry existiert
 async function checkTodayEntry(userId: string) {
@@ -32,9 +26,8 @@ export async function POST(request: NextRequest) {
             headers: await headers()
         });
         const code = session?.user.id;
-        const { spotifyUrl } = await request.json();
+        const { songUrl } = await request.json();
 
-        console.log(code);
         if (!code) {
             return NextResponse.json(
                 { error: "Kein Login Vorhanden" },
@@ -42,9 +35,9 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (!spotifyUrl) {
+        if (!songUrl) {
             return NextResponse.json(
-                { error: "Spotify URL ist erforderlich" },
+                { error: "Song URL ist erforderlich" },
                 { status: 400 }
             );
         }
@@ -55,24 +48,29 @@ export async function POST(request: NextRequest) {
             await Entry.findByIdAndDelete(todayEntry._id);
         }
 
-        // 2. Track ID extrahieren
-        const trackId = extractSpotifyId(spotifyUrl);
-        if (!trackId) {
+        let trackData: any = null;
+        if (songUrl.includes("spotify.com")) {
+            trackData = await createSpotifyTrackData(songUrl);
+        } else if (songUrl.includes("soundcloud.com")) {
+            trackData = await createSoundCloudTrackData(songUrl);
+        } else {
             return NextResponse.json(
-                { error: "Ungültige Spotify URL" },
+                { error: "Ungültige Plattform" },
                 { status: 400 }
             );
         }
 
-        // 3. Spotify API aufrufen
-        const trackData = await fetchSpotifyTrack(trackId);
+        if (!trackData) {
+            return NextResponse.json(
+                { error: "Ungültige URL" },
+                { status: 400 }
+            );
+        }
 
+        console.log(trackData.songUrl);
         // 4. Entry erstellen
         const entry = await Entry.create({
-            name: trackData.name,
-            artist: trackData.artists[0]?.name || 'Unknown Artist',
-            spotifyId: trackData.id,
-            imageSrc: trackData.album.images[0]?.url || null,
+            ...trackData,
             user: code
         });
 

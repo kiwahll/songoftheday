@@ -64,7 +64,6 @@ export async function fetchSpotifyTrack(trackId: string) {
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response?.status === 401) {
-                // Token可能是无效的，清除缓存并重试
                 cachedToken = null;
                 throw new Error('Spotify Token ungültig - erneuter Versuch');
             } else if (error.response?.status === 404) {

@@ -73,7 +73,7 @@ export default async function SongEntrySlot({ user = undefined }: { user?: UserD
                 <div className={`w-40 h-40 mx-auto bg-gray-100 rounded-3xl shadow-lg overflow-hidden ring-4 ring-white ring-offset-2 ${isOwnCard ? 'ring-offset-blue-50' : 'ring-offset-gray-50'
                     }`}>
                     {entrie ? (
-                        <Link href={"https://open.spotify.com/intl-de/track/" + entrie.spotifyId} target="_blank">
+                        <Link href={entrie.songUrl || ""} target="_blank">
                             <Image
                                 src={entrie.imageSrc || "https://i.scdn.co/image/ab67616d00001e02b5c53fb3985d4f1aa48bfe77"}
                                 width={160}

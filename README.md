@@ -83,24 +83,3 @@ npm run dev
 | `SPOTIFY_CLIENT_SECRET` | Spotify App Client Secret | ✅ Ja |
 | `MONGODB_URI` | MongoDB Verbindungs-String | ✅ Ja |
 
-## API Endpoints
-
-- `POST /api/spotify/import` - Importiert einen Song über Spotify URL
-- `GET /` - Hauptseite mit Song-Übersicht
-
-## Projektstruktur
-
-```
-songoftheday/
-├── app/
-│   ├── api/spotify/import/    # Spotify Import API
-│   ├── add-song/              # Song hinzufügen Seite
-│   └── page.tsx               # Hauptseite
-├── lib/
-│   ├── components/            # React Komponenten
-│   ├── models/               # Mongoose Models
-│   ├── mongodb.ts            # DB Verbindung
-│   ├── spotify.ts            # Spotify API Utils
-│   └── utils.ts              # Helper Funktionen
-└── public/                   # Statische Assets
-```
