@@ -19,6 +19,19 @@ export default function AddSongPage() {
         if (text) setSongUrl(text);
     }, []);
 
+    async function checkPushRegistration(): Promise<boolean> {
+        try {
+            const response = await fetch('/api/pushregister');
+            if (response.ok) {
+                const data = await response.json();
+                return data.hasRegistration;
+            }
+        } catch (error) {
+            console.error('Fehler beim Prüfen der Push-Registration:', error);
+        }
+        return false;
+    }
+
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
@@ -36,8 +49,12 @@ export default function AddSongPage() {
             const data = await response.json();
 
             if (response.ok) {
-                // Erfolgreich - zeige Push Modal
-                setShowPushModal(true);
+                const hasRegistration = await checkPushRegistration();
+                if (hasRegistration) {
+                    router.push('/');
+                } else {
+                    setShowPushModal(true);
+                }
             } else {
                 // Fehler anzeigen
                 setError(data.error || 'Ein Fehler ist aufgetreten');
@@ -121,7 +138,7 @@ export default function AddSongPage() {
             </div>
 
             {/* Push Notification Modal */}
-            <PushNotificationModal 
+            <PushNotificationModal
                 isOpen={showPushModal}
                 onClose={() => router.push('/')}
             />

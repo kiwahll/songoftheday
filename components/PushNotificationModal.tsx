@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 
 interface PushNotificationModalProps {
@@ -9,29 +9,7 @@ interface PushNotificationModalProps {
 }
 
 export default function PushNotificationModal({ isOpen, onClose }: PushNotificationModalProps) {
-    const [hasRegistration, setHasRegistration] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
     const [isSubscribing, setIsSubscribing] = useState(false);
-
-    useEffect(() => {
-        if (isOpen) {
-            checkPushRegistration();
-        }
-    }, [isOpen]);
-
-    async function checkPushRegistration() {
-        try {
-            const response = await fetch('/api/pushregister');
-            if (response.ok) {
-                const data = await response.json();
-                setHasRegistration(data.hasRegistration);
-            }
-        } catch (error) {
-            console.error('Fehler beim Prüfen der Push-Registration:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    }
 
     async function subscribePush() {
         setIsSubscribing(true);
@@ -75,7 +53,7 @@ export default function PushNotificationModal({ isOpen, onClose }: PushNotificat
 
                     {/* Description */}
                     <p className="text-gray-600 mb-6" style={{ color: 'var(--ios-text-secondary)' }}>
-                        Erhalte sofort Benachrichtigungen, wenn deine Freunde neue Songs teilen. 
+                        Erhalte sofort Benachrichtigungen, wenn deine Freunde neue Songs teilen.
                         Sei immer dabei, wenn es neue Musik gibt!
                     </p>
 
@@ -102,40 +80,30 @@ export default function PushNotificationModal({ isOpen, onClose }: PushNotificat
                     </div>
 
                     {/* Buttons */}
-                    {isLoading ? (
-                        <div className="py-3 px-4 bg-gray-200 text-gray-600 rounded-lg text-sm font-medium">
-                            Lade...
-                        </div>
-                    ) : hasRegistration ? (
-                        <div className="py-3 px-4 bg-green-100 text-green-700 rounded-lg text-sm font-medium">
-                            ✅ Bereits aktiviert
-                        </div>
-                    ) : (
-                        <div className="space-y-3">
-                            <button
-                                onClick={subscribePush}
-                                disabled={isSubscribing}
-                                className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                            >
-                                {isSubscribing ? 'Wird geöffnet...' : '🔔 Zu den Einstellungen'}
-                            </button>
-                            
-                            <button
-                                onClick={onClose}
-                                className="w-full py-3 px-4 rounded-lg font-medium transition-all"
-                                style={{ 
-                                    backgroundColor: 'var(--ios-light-gray)', 
-                                    color: 'var(--ios-text-secondary)' 
-                                }}
-                            >
-                                Später
-                            </button>
-                        </div>
-                    )}
+                    <div className="space-y-3">
+                        <button
+                            onClick={subscribePush}
+                            disabled={isSubscribing}
+                            className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        >
+                            {isSubscribing ? 'Wird geöffnet...' : '🔔 Zu den Einstellungen'}
+                        </button>
+
+                        <button
+                            onClick={onClose}
+                            className="w-full py-3 px-4 rounded-lg font-medium transition-all"
+                            style={{
+                                backgroundColor: 'var(--ios-light-gray)',
+                                color: 'var(--ios-text-secondary)'
+                            }}
+                        >
+                            Später
+                        </button>
+                    </div>
 
                     {/* Settings Link */}
                     <p className="text-xs text-gray-500 mt-4" style={{ color: 'var(--ios-text-muted)' }}>
-                        Du kannst Benachrichtigungen jederzeit in den 
+                        Du kannst Benachrichtigungen jederzeit in den
                         <Link href="/settings/notifications" className="text-purple-600 hover:text-purple-700 underline ml-1">
                             Einstellungen
                         </Link>
