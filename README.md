@@ -82,4 +82,13 @@ npm run dev
 | `SPOTIFY_CLIENT_ID` | Spotify App Client ID | ✅ Ja |
 | `SPOTIFY_CLIENT_SECRET` | Spotify App Client Secret | ✅ Ja |
 | `MONGODB_URI` | MongoDB Verbindungs-String | ✅ Ja |
-
+| `GOOGLE_CLIENT_ID` | Google OAuth Client ID | ✅ Ja |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth Client Secret | ✅ Ja |
+| `BETTER_AUTH_SECRET` | Better Auth Secret Key | ✅ Ja |
+| `BETTER_AUTH_BASE_URL` | Better Auth Base URL | ✅ Ja |
+| `CRON_SECRET` | Cron Job Secret Key | ✅ Ja |
+| `VAPID_PRIVATE_KEY` | VAPID Private Key für Push-Benachrichtigungen | ✅ Ja |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | VAPID Public Key für Push-Benachrichtigungen | ✅ Ja |
+| `IOS_SHORTCUT_URL` | iOS Shortcut URL für App-Integration | ❌ Nein |
+| `SOUNDCLOUD_CLIENT_ID` | SoundCloud App Client ID | ✅ Ja |
+| `SOUNDCLOUD_CLIENT_SECRET` | SoundCloud App Client Secret | ✅ Ja |
