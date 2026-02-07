@@ -4,11 +4,13 @@ import { useEffect, useState, SubmitEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import React from 'react';
+import PushNotificationModal from '@/components/PushNotificationModal';
 
 export default function AddSongPage() {
     const [spotifyUrl, setSpotifyUrl] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showPushModal, setShowPushModal] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -34,8 +36,8 @@ export default function AddSongPage() {
             const data = await response.json();
 
             if (response.ok) {
-                // Erfolgreich - zurück zur Übersicht
-                router.push('/');
+                // Erfolgreich - zeige Push Modal
+                setShowPushModal(true);
             } else {
                 // Fehler anzeigen
                 setError(data.error || 'Ein Fehler ist aufgetreten');
@@ -117,6 +119,12 @@ export default function AddSongPage() {
                     </ol>
                 </div>
             </div>
+
+            {/* Push Notification Modal */}
+            <PushNotificationModal 
+                isOpen={showPushModal}
+                onClose={() => router.push('/')}
+            />
         </main>
     );
 }
