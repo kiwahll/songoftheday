@@ -9,7 +9,7 @@ async function loadUserFriends(currentUser: any) {
 
     try {
         const requestHeaders = await headers();
-        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/friends/list`, {
+        const response = await fetch(`${process.env.BETTER_AUTH_BASE_URL || 'http://localhost:3000'}/api/friends/list`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
