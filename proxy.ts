@@ -6,7 +6,7 @@ export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl
 
     // Public routes - keine Auth benötigt
-    if (pathname.startsWith('/login') || 
+    if (pathname.startsWith('/login') ||
         pathname.startsWith('/api/auth') || // better-auth routes
         pathname.startsWith('/_next') ||
         pathname.startsWith('/favicon') ||
@@ -14,13 +14,17 @@ export async function proxy(request: NextRequest) {
         return NextResponse.next()
     }
 
-    // Better-auth Session check
-    const session = await auth.api.getSession({
-        headers: request.headers
-    })
-
-    if (!session?.user) {
-        return NextResponse.redirect(new URL('/login', request.url))
+    try {
+        // Better-auth Session check
+        const session = await auth.api.getSession({
+            headers: request.headers
+        });
+        if (!session?.user) {
+            return NextResponse.redirect(new URL('/login', request.url))
+        }
+    } catch (e) {
+        console.error('Error checking session:', e);
+        return NextResponse.redirect(new URL('/login', request.url));
     }
 
     return NextResponse.next()

@@ -1,13 +1,37 @@
 import SongEntrySlot from "@/lib/components/SongEntrySlot";
 import Link from 'next/link';
-import Friend from "@/lib/models/Friend";
-import dbConnect from "@/lib/mongodb";
 import { auth } from "@/lib/auth";
 import PushNotificationToast from "@/components/PushNotificationToast";
 import { headers } from "next/headers";
 
+async function loadUserFriends(currentUser: any) {
+    if (!currentUser) return [];
+
+    try {
+        const requestHeaders = await headers();
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/friends/list`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie': requestHeaders.get('cookie') || '',
+            },
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            console.error('Failed to fetch friends:', response.status);
+            return [];
+        }
+
+        const data = await response.json();
+        return data.friends?.map((friendship: any) => friendship.friend) || [];
+    } catch (error) {
+        console.error('Error fetching friends:', error);
+        return [];
+    }
+}
+
 export default async function Home() {
-    let friends = [];
     let currentUser: any = undefined;
 
     try {
@@ -17,20 +41,12 @@ export default async function Home() {
 
         if (session?.user) {
             currentUser = session.user;
-            await dbConnect();
-
-            const friendships = await Friend.find({
-                users: currentUser.id
-            }).populate('users', 'name email');
-
-            friends = friendships.map(friendship => {
-                const friendUser = friendship.users.find((u: any) => u._id.toString() !== currentUser.id);
-                return friendUser;
-            }).filter(item => item);
         }
     } catch (error) {
-        console.error('Error fetching friends data:', error);
+        console.error('Error fetching session:', error);
     }
+
+    const friends = await loadUserFriends(currentUser);
 
     const today = new Date().toLocaleDateString('de-DE', {
         weekday: 'long',

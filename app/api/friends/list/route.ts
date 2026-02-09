@@ -2,7 +2,8 @@ import Friend from "@/lib/models/Friend";
 import dbConnect from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { auth, getDb } from "@/lib/auth";
+import { ObjectId } from "mongodb";
 
 export async function GET(request: NextRequest) {
     try {
@@ -23,22 +24,25 @@ export async function GET(request: NextRequest) {
         // Alle Friendships finden wo der User beteiligt ist
         const friendships = await Friend.find({
             users: userCode
-        }).populate('users', 'name email'); // Alle User Details populated
+        });
 
-        // Friends extrahieren (nicht der aktuelle User)
-        const friends = friendships.map(friendship => {
-            const friendUser = friendship.users.find((u: any) => u._id.toString() !== userCode);
+        const db = getDb();
+        const friendShipsWithUserData = await Promise.all(friendships.map(async (friendship) => {
+            const friendId = friendship.users.find((id: any) => id.toString() !== userCode.toString());
+            const friendUser = await db.collection('user').findOne(
+                { _id: new ObjectId(friendId) }
+            );
             return {
                 _id: friendship._id,
                 friend: friendUser,
                 createdAt: friendship.createdAt
             };
-        }).filter(item => item.friend); // Nur gültige Friends
-
+        }));
+        
         return NextResponse.json(
             {
-                friends: friends,
-                count: friends.length
+                friends: friendShipsWithUserData,
+                count: friendShipsWithUserData.length
             },
             {
                 status: 200,
